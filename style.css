@@ -1,0 +1,29 @@
+/* You can move some CSS here if you want better organization */
+/* For now, keeping all CSS in HTML for simplicity */
+/* Delete button styling */
+.btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-outline-danger:disabled {
+    border-color: #ccc;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Edit button styling */
+.btn-outline-primary {
+    border-color: #0066ff;
+    color: #0066ff;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0066ff;
+    color: white;
+}

@@ -1,0 +1,2905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRINTWELL • Professional Printing Invoice</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d5aa0;
+            --accent: #0066ff;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --border: #dee2e6;
+            --radius: 8px;
+        }
+
+        
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f7fb;
+            color: #333;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container-fluid {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header */
+        .app-header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-upload {
+            width: 50px;
+            height: 50px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .logo-upload:hover {
+            border-color: var(--accent);
+        }
+        
+        .logo-preview {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+        }
+        
+        .logo-placeholder {
+            color: #666;
+            font-size: 24px;
+        }
+        
+        .brand-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0;
+        }
+        
+        .brand-tagline {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 0;
+        }
+        
+        /* Navigation */
+        .app-nav {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 10px 0;
+        }
+        
+        .nav-tabs {
+            border: none;
+            gap: 5px;
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            padding: 10px 20px;
+            color: #666;
+            font-weight: 500;
+            border-radius: var(--radius);
+        }
+        
+        .nav-tabs .nav-link.active {
+            background: var(--accent);
+            color: white;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 20px 0;
+        }
+        
+        /* Card Styling */
+        .card {
+            border: none;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 15px 20px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        /* Form Styling */
+        .form-label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .form-control, .form-select {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.95rem;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0,102,255,0.1);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            color: #dee2e6;
+            margin-bottom: 15px;
+        }
+        
+        /* Items Grid - CHANGED: Normal order (newest on top) */
+        .items-grid {
+            display: flex;
+            flex-direction: column; /* CHANGED: Normal order */
+            gap: 15px;
+        }
+        
+        .item-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            position: relative;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .item-title {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        
+        .btn-remove {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        /* Size Options */
+        .size-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .size-btn {
+            padding: 12px 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: white;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+        
+        .size-btn:hover {
+            border-color: var(--accent);
+            background: #f0f7ff;
+        }
+        
+        .size-btn.active {
+            border-color: var(--accent);
+            background: #e3f2fd;
+            font-weight: 500;
+        }
+        
+        /* Dimensions Input */
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .input-with-unit {
+            display: flex;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            height: 50px;
+        }
+        
+        .input-with-unit input {
+            flex: 1;
+            border: none;
+            padding: 12px;
+            font-size: 1.1rem;
+            min-width: 0;
+            width: 100%;
+        }
+        
+        .input-with-unit input:focus {
+            outline: none;
+        }
+        
+        .unit-select {
+            border: none;
+            border-left: 1px solid var(--border);
+            background: #f8f9fa;
+            padding: 0 15px;
+            font-size: 1rem;
+            min-width: 80px;
+            white-space: nowrap;
+        }
+        
+        /* Quantity Input */
+        .quantity-group {
+            position: relative;
+        }
+        
+        .quantity-symbol {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1.2rem;
+            z-index: 1;
+        }
+        
+        .quantity-input {
+            padding-left: 40px !important;
+            text-align: center;
+            font-size: 1.1rem;
+            height: 50px;
+        }
+        
+        /* Unit Price Input */
+        .input-group {
+            height: 50px;
+        }
+        
+        .input-group .form-control {
+            height: 100%;
+            font-size: 1.1rem;
+            padding: 12px;
+        }
+        
+        .input-group-text {
+            font-size: 1.1rem;
+            padding: 0 15px;
+        }
+        
+        /* Summary Panel */
+        .summary-panel {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 20px;
+        }
+        
+        .summary-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        
+        .summary-body {
+            padding: 20px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-total {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-action {
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0052cc;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        /* Settings Modal */
+        .settings-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .settings-content {
+            background: white;
+            border-radius: var(--radius);
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        /* Printer Selection Modal */
+        .printer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            padding: 20px;
+        }
+        
+        .printer-content {
+            background: white;
+            border-radius: var(--radius);
+            width: 400px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .printer-option {
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .printer-option:hover {
+            border-color: var(--accent);
+            background: #f0f7ff;
+        }
+        
+        .printer-option.selected {
+            border-color: var(--accent);
+            background: #e3f2fd;
+            font-weight: 500;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dimensions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .unit-select {
+                min-width: 70px;
+            }
+        }
+        
+        /* Status badges */
+        .status-badge {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .status-paid {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-partial {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* Custom info items */
+        .custom-info-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        .custom-info-item input {
+            flex: 1;
+        }
+        
+        /* Save PDF button */
+        .btn-save {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-save:hover {
+            background: #218838;
+        }
+
+        /* Menu Bar */
+        .menu-bar {
+            background: #1a365d;
+            color: white;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            height: 40px;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .menu-item {
+            position: relative;
+            padding: 0 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .menu-item:hover {
+            background: #2d5aa0;
+        }
+
+        .menu-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            color: #333;
+            min-width: 220px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            display: none;
+            z-index: 10000;
+            margin-top: 0;
+            padding: 8px 0;
+        }
+
+        .menu-item:hover .menu-dropdown {
+            display: block;
+        }
+
+        .menu-dropdown-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-dropdown-item:hover {
+            background: #f0f7ff;
+        }
+
+        .menu-dropdown-item:first-child {
+            border-radius: 4px 4px 0 0;
+        }
+
+        .menu-dropdown-item:last-child {
+            border-radius: 0 0 4px 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Bar -->
+    <div class="menu-bar">
+        <div class="menu-item">
+            File
+            <div class="menu-dropdown">
+                <button class="menu-dropdown-item" onclick="openNewInvoiceWindow()">
+                    <i class="fas fa-plus"></i> New Invoice
+                </button>
+                <button class="menu-dropdown-item" onclick="openExistingInvoiceMenu()">
+                    <i class="fas fa-folder-open"></i> Open Saved Invoice
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo-container">
+                    <div class="logo-upload" id="logoUploadBtn">
+                        <img src="" alt="Logo" class="logo-preview" id="logoPreview">
+                        <div class="logo-placeholder" id="logoPlaceholder">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="brand-name" id="companyName">PRINTWELL</h1>
+                        <p class="brand-tagline" id="companyMotto">Professional Printing Services</p>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-outline-primary" onclick="showSettings()">
+                        <i class="fas fa-cog"></i> Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation -->
+    <nav class="app-nav">
+        <div class="container-fluid">
+            <ul class="nav nav-tabs" id="mainTabs">
+                <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#invoiceTab">
+                        <i class="fas fa-file-invoice"></i> Create Invoice
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#historyTab">
+                        <i class="fas fa-history"></i> Invoice History
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="container-fluid main-content">
+        <div class="tab-content">
+            <!-- Invoice Tab -->
+            <div class="tab-pane fade show active" id="invoiceTab">
+                <div class="row">
+                    <!-- Left Column - Customer & Items -->
+                    <div class="col-lg-8">
+                        <!-- Customer Information - REMOVED: Email and Additional Info -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-user me-2"></i> Customer Information
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Customer Name *</label>
+                                        <input type="text" class="form-control" id="customerName" 
+                                               placeholder="Enter customer name" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Phone Number</label>
+                                        <input type="text" class="form-control" id="customerPhone" 
+                                               placeholder="Enter phone number">
+                                    </div>
+                                    <!-- REMOVED: Email Address field -->
+                                    <!-- REMOVED: Additional Info field -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Printing Items -->
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="fas fa-cube me-2"></i> Printing Items
+                                    <span class="badge bg-primary ms-2" id="itemCount">0</span>
+                                </div>
+                                <button class="btn btn-sm btn-primary" onclick="addNewItem()">
+                                    <i class="fas fa-plus"></i> Add Item
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <!-- Empty State -->
+                                <div class="empty-state" id="emptyState">
+                                    <div class="empty-state-icon">
+                                        <i class="fas fa-receipt"></i>
+                                    </div>
+                                    <h5 class="mb-3">No items added yet</h5>
+                                    <p class="text-muted mb-4">Start by adding your first printing item</p>
+                                    <button class="btn btn-primary" onclick="addNewItem()">
+                                        <i class="fas fa-plus"></i> Add First Item
+                                    </button>
+                                </div>
+                                
+                                <!-- Items Container -->
+                                <div id="itemsContainer" style="display: none;">
+                                    <div class="items-grid" id="itemsList">
+                                        <!-- Items will be rendered here IN NORMAL ORDER (newest on top) -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column - Summary -->
+                    <div class="col-lg-4">
+                        <div class="summary-panel">
+                            <div class="summary-header">
+                                <h5 class="mb-1">Invoice Summary</h5>
+                                <small>PRINTWELL Professional Invoice</small>
+                            </div>
+                            <div class="summary-body">
+                                <div class="summary-row">
+                                    <span>Subtotal:</span>
+                                    <span id="subtotal">GH₵0.00</span>
+                                </div>
+                                
+                                <div class="summary-row">
+                                    <span>Tax:</span>
+                                    <div>
+                                        <input type="number" class="form-control form-control-sm d-inline-block" 
+                                               id="taxRate" value="0" min="0" max="100" step="0.1" 
+                                               style="width: 100px; height: 38px;" onchange="calculateTotals()">
+                                        <span class="ms-1">%</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="summary-row">
+                                    <span>Tax Amount:</span>
+                                    <span id="taxAmount">GH₵0.00</span>
+                                </div>
+                                
+                                <div class="summary-row">
+                                    <span>Total:</span>
+                                    <span class="summary-total" id="grandTotal">GH₵0.00</span>
+                                </div>
+                                
+                                <!-- Notes -->
+                                <div class="mt-3">
+                                    <label class="form-label">Notes</label>
+                                    <textarea class="form-control" id="invoiceNotes" 
+                                              rows="3" placeholder="Additional notes..."></textarea>
+                                </div>
+                                
+                                <!-- Invoice Status -->
+                                <div class="mt-3">
+                                    <label class="form-label">Invoice Status</label>
+                                    <select class="form-select" id="invoiceStatus">
+                                        <option value="pending" selected>● Pending</option>
+                                        <option value="paid">● Paid</option>
+                                        <option value="partial">● Partial Payment</option>
+                                        <option value="cancelled">● Cancelled</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Printer Selection -->
+                                <div class="mt-3">
+                                    <label class="form-label">Printer Selection</label>
+                                    <div class="d-flex gap-2">
+                                        <select class="form-select" id="printerSelect">
+                                            <option value="">Select printer...</option>
+                                        </select>
+                                        <button class="btn btn-outline-secondary" onclick="detectPrinters()" 
+                                                title="Refresh printer list">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                    </div>
+                                    <small class="text-muted">Select printer before printing</small>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="action-buttons mt-4">
+                                    <button class="btn-action btn-save" onclick="saveInvoiceAsPDF()">
+                                        <i class="fas fa-save"></i> Save PDF
+                                    </button>
+                                    <button class="btn-action btn-primary" onclick="saveInvoiceToHistory()">
+                                        <i class="fas fa-database"></i> Save to History
+                                    </button>
+                                    <button class="btn-action btn-secondary" onclick="showPrintDialog()">
+                                        <i class="fas fa-print"></i> Print
+                                    </button>
+                                    <button class="btn-action btn-secondary" onclick="clearAll()">
+                                        <i class="fas fa-redo"></i> Clear
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- History Tab -->
+            <div class="tab-pane fade" id="historyTab">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-history me-2"></i> Invoice History
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3 d-flex">
+                            <input id="invoiceHistorySearch" class="form-control form-control-sm me-2" placeholder="Search invoices (customer, product, notes, keywords)" />
+                            <button class="btn btn-sm btn-outline-secondary" onclick="clearInvoiceHistorySearch()">Clear</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Invoice #</th>
+                                        <th>Customer</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Total</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="invoiceHistory">
+                                    <!-- Invoice history will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-cog me-2"></i> Settings</h5>
+                    <button class="btn-close" onclick="hideSettings()"></button>
+                </div>
+                <div class="card-body">
+                    <!-- Company Information -->
+                    <div class="mb-5">
+                        <h6 class="mb-3"><i class="fas fa-building me-2"></i> Company Information</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Company Name</label>
+                                <input type="text" class="form-control" id="companyNameInput" value="PRINTWELL">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Company Motto</label>
+                                <input type="text" class="form-control" id="companyMottoInput" value="TIME TO DOMINATE!!">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Company Logo</label>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="logo-upload" id="logoUploadSettings" style="width: 100px; height: 100px;">
+                                        <img src="" alt="Logo" class="logo-preview" id="logoPreviewSettings">
+                                        <div class="logo-placeholder">
+                                            <i class="fas fa-camera"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-1">Upload your company logo</p>
+                                        <small class="text-muted">Logo will appear on invoices</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Physical Address</label>
+                                <input type="text" class="form-control" id="companyAddressInput" 
+                                       value="123 Print Street, Accra, Ghana">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Contact Phone</label>
+                                <input type="text" class="form-control" id="companyPhoneInput" 
+                                       value="+233 24 123 4567">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="companyEmailInput" 
+                                       value="info@printwell.com">
+                            </div>
+                            
+                            <!-- Custom Information Fields -->
+                            <div class="col-md-12">
+                                <label class="form-label">Additional Company Information</label>
+                                <div id="customInfoContainer">
+                                    <!-- Custom info items will be added here -->
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="addCustomInfoField()">
+                                    <i class="fas fa-plus"></i> Add Custom Info
+                                </button>
+                                <small class="text-muted">Add extra fields to appear on invoices (e.g., WhatsApp, Website)</small>
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <label class="form-label">Invoice Footer Message</label>
+                                <textarea class="form-control" id="companyFooterInput" rows="2">
+Thank you for choosing PRINTWELL Factory! For inquiries, contact us at info@printwell.com
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product Management -->
+                    <div class="mb-5">
+                        <h6 class="mb-3"><i class="fas fa-cube me-2"></i> Product Management</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Type</th>
+                                        <th>Price/Sizes</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productsList">
+                                    <!-- Products will be listed here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="btn btn-sm btn-primary mt-2" onclick="addNewProduct()">
+                            <i class="fas fa-plus"></i> Add New Product
+                        </button>
+                    </div>
+                    
+                    <!-- Product Form (Hidden by default) -->
+                    <div id="productForm" style="display: none;">
+                        <h6 class="mb-3">Add/Edit Product</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Product Name</label>
+                                <input type="text" class="form-control" id="productName" placeholder="e.g., Banner">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Calculation Type</label>
+                                <select class="form-select" id="productCalculationType">
+                                    <option value="area">Area-based (w × h × price)</option>
+                                    <option value="fixed">Fixed Price (by size)</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Area-based product fields -->
+                            <div id="areaFields">
+                                <div class="col-md-6">
+                                    <label class="form-label">Default Unit Price (per sq ft)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">GH₵</span>
+                                        <input type="number" class="form-control" id="productPrice" value="3.5" step="0.01">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">Custom Formula (Optional)</label>
+                                    <textarea class="form-control" id="productFormula" rows="3" 
+                                              placeholder="Leave empty to use default formula:
+Total = (Width × Height in sq ft) × Unit Price × Quantity
+You can customize this formula using variables:
+{w} = width in feet, {h} = height in feet, {p} = unit price, {q} = quantity"></textarea>
+                                    <small class="text-muted">Example: ({w} * {h} * {p} * {q}) + 10</small>
+                                </div>
+                            </div>
+                            
+                            <!-- Fixed price product fields -->
+                            <div id="fixedFields" style="display: none;">
+                                <div class="col-md-12">
+                                    <label class="form-label">Fixed Prices by Size</label>
+                                    <div id="fixedPriceSizes">
+                                        <!-- Fixed price size inputs will be added here -->
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="addFixedPriceSize()">
+                                        <i class="fas fa-plus"></i> Add Size
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <label class="form-label">Default Sizes (comma separated)</label>
+                                <input type="text" class="form-control" id="productSizes" 
+                                       placeholder="e.g., Small:2x3, Medium:3x4, Large:4x6">
+                                <small class="text-muted">Format: Name:WidthxHeight (in inches), separated by commas</small>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="d-flex gap-2 mt-3">
+                                    <button class="btn btn-primary" onclick="saveProduct()">
+                                        <i class="fas fa-save"></i> Save Product
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="cancelProduct()">
+                                        <i class="fas fa-times"></i> Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Save Company Settings Button -->
+                    <div class="mt-4">
+                        <button class="btn btn-primary w-100" onclick="saveCompanySettings()">
+                            <i class="fas fa-save"></i> Save All Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Printer Selection Modal -->
+    <div class="printer-modal" id="printerModal">
+        <div class="printer-content">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-print me-2"></i> Select Printer</h5>
+                    <button class="btn-close" onclick="hidePrinterModal()"></button>
+                </div>
+                <div class="card-body">
+                    <div id="printerList">
+                        <p class="text-muted mb-3">Detecting available printers...</p>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn btn-primary w-100" onclick="printWithSelectedPrinter()">
+                            <i class="fas fa-print"></i> Print Invoice
+                        </button>
+                        <button class="btn btn-outline-secondary w-100 mt-2" onclick="hidePrinterModal()">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hidden file input for logo -->
+    <input type="file" id="logoFileInput" accept="image/*" style="display: none;" onchange="handleLogoUpload(event)">
+    
+    <!-- JavaScript -->
+    <script>
+        // State management
+        let invoiceItems = [];
+        let itemIdCounter = 1;
+        let products = {};
+        let editingProductId = null;
+        let availablePrinters = [];
+        let selectedPrinter = null;
+        
+        // Company information
+        let companyInfo = {
+            name: "PRINTWELL",
+            motto: "TIME TO DOMINATE!!",
+            address: "123 Print Street, Accra, Ghana",
+            phone: "+233 24 123 4567",
+            email: "info@printwell.com",
+            footer: "Thank you for choosing PRINTWELL Factory! For inquiries, contact us at info@printwell.com",
+            logo: null,
+            customInfo: []
+        };
+        
+        // Invoice history
+        let invoiceHistory = [];
+        
+        // Default products based on price list
+        const defaultProducts = {
+            'poster': {
+                id: 'poster',
+                name: 'Poster/Sticker',
+                price: 0,
+                formula: null,
+                calculationType: 'fixed',
+                sizes: {
+                    'A5': { width: 5.83, height: 8.27, fixedPrice: 1.00 },
+                    'A4': { width: 8.27, height: 11.69, fixedPrice: 2.00 },
+                    'A3': { width: 11.69, height: 16.54, fixedPrice: 4.00 },
+                    'A2': { width: 16.54, height: 23.39, fixedPrice: 8.00 },
+                    'Custom': { width: '', height: '', fixedPrice: 0 }
+                }
+            },
+            'flex': {
+                id: 'flex',
+                name: 'Flex',
+                price: 3.5,
+                formula: null,
+                calculationType: 'area',
+                sizes: {
+                    '2x3 ft': { width: 2, height: 3 },
+                    '3x4 ft': { width: 3, height: 4 },
+                    '4x6 ft': { width: 4, height: 6 },
+                    'Custom': { width: '', height: '' }
+                }
+            },
+            'sticker_area': {
+                id: 'sticker_area',
+                name: 'Sticker (Area-based)',
+                price: 3.0,
+                formula: null,
+                calculationType: 'area',
+                sizes: {
+                    'Small': { width: 1, height: 1 },
+                    'Medium': { width: 2, height: 2 },
+                    'Large': { width: 3, height: 3 },
+                    'Custom': { width: '', height: '' }
+                }
+            }
+        };
+        
+        // Load all data from Electron's file system
+async function loadAllData() {
+    console.log("Loading all data...");
+    
+    try {
+        // Load company settings
+        const settingsResult = await window.electronAPI.loadSettings();
+        if (settingsResult.success) {
+            companyInfo = {
+                ...companyInfo,
+                ...settingsResult.settings
+            };
+            console.log("Loaded company settings:", companyInfo);
+            updateCompanyUI();
+        }
+        
+        // Load products
+        const productsResult = await window.electronAPI.loadProducts();
+        if (productsResult.success) {
+            products = productsResult.products;
+            console.log("Loaded products:", Object.keys(products));
+        }
+        
+        // Load invoice history from localStorage (temporary, can migrate to file later)
+        const savedHistory = localStorage.getItem('printwell_invoice_history');
+        if (savedHistory) {
+            invoiceHistory = JSON.parse(savedHistory);
+            // Ensure older entries have a searchIndex
+            invoiceHistory.forEach(inv => { if (!inv.searchIndex) inv.searchIndex = buildInvoiceSearchIndex(inv); });
+            renderInvoiceHistory();
+        }
+        
+        // Load saved logo from localStorage
+        const savedLogo = localStorage.getItem('printwell_logo');
+        if (savedLogo) {
+            companyInfo.logo = savedLogo;
+            updateLogoDisplay(savedLogo);
+        }
+        
+        // Load saved printer
+        const savedPrinter = localStorage.getItem('printwell_selected_printer');
+        if (savedPrinter) {
+            selectedPrinter = savedPrinter;
+            const dropdown = document.getElementById('printerSelect');
+            if (dropdown) dropdown.value = savedPrinter;
+        }
+        
+        console.log("All data loaded successfully");
+    } catch (error) {
+        console.error("Error loading data:", error);
+    }
+}
+
+        // Save all data to Electron's file system
+        async function saveAllData() {
+            console.log("Saving all data...");
+            
+            try {
+                // Save company settings
+                await window.electronAPI.saveSettings(companyInfo);
+                
+                // Save products
+                await window.electronAPI.saveProducts(products);
+                
+                // Save invoice history to localStorage (temporary)
+                localStorage.setItem('printwell_invoice_history', JSON.stringify(invoiceHistory));
+                
+                console.log("All data saved successfully");
+            } catch (error) {
+                console.error("Error saving data:", error);
+            }
+        }
+        
+        // Update company info UI
+        function updateCompanyUI() {
+            console.log("Updating company UI with:", companyInfo);
+            
+            // Update header
+            document.getElementById('companyName').textContent = companyInfo.name || "PRINTWELL";
+            document.getElementById('companyMotto').textContent = companyInfo.motto || "Professional Printing Services";
+            
+            // Update logo in header
+            if (companyInfo.logo) {
+                const logoPreview = document.getElementById('logoPreview');
+                const logoPlaceholder = document.getElementById('logoPlaceholder');
+                logoPreview.src = companyInfo.logo;
+                logoPreview.style.display = 'block';
+                logoPlaceholder.style.display = 'none';
+            }
+            
+            // Update settings modal inputs
+            document.getElementById('companyNameInput').value = companyInfo.name || '';
+            document.getElementById('companyMottoInput').value = companyInfo.motto || '';
+            document.getElementById('companyAddressInput').value = companyInfo.address || '';
+            document.getElementById('companyPhoneInput').value = companyInfo.phone || '';
+            document.getElementById('companyEmailInput').value = companyInfo.email || '';
+            document.getElementById('companyFooterInput').value = companyInfo.footer || '';
+            
+            // Update custom info fields
+            renderCustomInfoFields();
+        }
+        
+        // Render custom info fields
+        function renderCustomInfoFields() {
+            const container = document.getElementById('customInfoContainer');
+            container.innerHTML = '';
+            
+            if (!companyInfo.customInfo) {
+                companyInfo.customInfo = [];
+            }
+            
+            companyInfo.customInfo.forEach((info, index) => {
+                const div = document.createElement('div');
+                div.className = 'custom-info-item';
+                div.innerHTML = `
+                    <input type="text" class="form-control" placeholder="Label (e.g., WhatsApp)" 
+                           value="${info.label || ''}" onchange="updateCustomInfo(${index}, 'label', this.value)">
+                    <input type="text" class="form-control" placeholder="Value (e.g., +233 24 123 4567)" 
+                           value="${info.value || ''}" onchange="updateCustomInfo(${index}, 'value', this.value)">
+                    <button class="btn btn-outline-danger" onclick="removeCustomInfo(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        // Add custom info field
+        function addCustomInfoField() {
+            if (!companyInfo.customInfo) {
+                companyInfo.customInfo = [];
+            }
+            companyInfo.customInfo.push({ label: '', value: '' });
+            renderCustomInfoFields();
+        }
+        
+        // Update custom info
+        function updateCustomInfo(index, field, value) {
+            if (companyInfo.customInfo && companyInfo.customInfo[index]) {
+                companyInfo.customInfo[index][field] = value;
+            }
+        }
+        
+        // Remove custom info
+        function removeCustomInfo(index) {
+            if (companyInfo.customInfo) {
+                companyInfo.customInfo.splice(index, 1);
+                renderCustomInfoFields();
+            }
+        }
+        
+        // Update logo display
+        function updateLogoDisplay(logoData) {
+            console.log("Updating logo display");
+            
+            companyInfo.logo = logoData;
+            
+            // Update logo in header
+            const logoPreview = document.getElementById('logoPreview');
+            const logoPlaceholder = document.getElementById('logoPlaceholder');
+            
+            if (logoData) {
+                logoPreview.src = logoData;
+                logoPreview.style.display = 'block';
+                logoPlaceholder.style.display = 'none';
+                
+                // Also update in settings modal if it's open
+                const logoPreviewSettings = document.getElementById('logoPreviewSettings');
+                if (logoPreviewSettings) {
+                    logoPreviewSettings.src = logoData;
+                    logoPreviewSettings.style.display = 'block';
+                    document.querySelector('#logoPreviewSettings').parentElement.querySelector('.logo-placeholder').style.display = 'none';
+                }
+            }
+        }
+        
+        // Get status display HTML
+        function getStatusDisplay(status) {
+            const statusMap = {
+                'pending': { text: 'Pending', color: 'orange', symbol: '●' },
+                'paid': { text: 'Paid', color: 'green', symbol: '●' },
+                'partial': { text: 'Partial Payment', color: 'blue', symbol: '●' },
+                'cancelled': { text: 'Cancelled', color: 'red', symbol: '●' }
+            };
+            
+            const statusInfo = statusMap[status] || statusMap.pending;
+            return `<span style="color: ${statusInfo.color}">${statusInfo.symbol} ${statusInfo.text}</span>`;
+        }
+        
+        // Get status badge HTML
+        function getStatusBadge(status) {
+            const statusMap = {
+                'pending': 'status-pending',
+                'paid': 'status-paid',
+                'partial': 'status-partial',
+                'cancelled': 'status-cancelled'
+            };
+            
+            const statusClass = statusMap[status] || 'status-pending';
+            const statusText = status.charAt(0).toUpperCase() + status.slice(1);
+            return `<span class="status-badge ${statusClass}">${statusText}</span>`;
+        }
+        
+        // Show settings modal
+        function showSettings() {
+            console.log("Showing settings modal");
+            
+            // Load current data into settings modal
+            loadSettingsData();
+            renderProductsList();
+            
+            // Show modal
+            document.getElementById('settingsModal').style.display = 'flex';
+        }
+        
+        // Hide settings modal
+        function hideSettings() {
+            console.log("Hiding settings modal");
+            document.getElementById('settingsModal').style.display = 'none';
+        }
+        
+        // Load settings data into modal inputs
+        function loadSettingsData() {
+            console.log("Loading settings data into modal...");
+            
+            // Set values in settings modal
+            document.getElementById('companyNameInput').value = companyInfo.name || '';
+            document.getElementById('companyMottoInput').value = companyInfo.motto || '';
+            document.getElementById('companyAddressInput').value = companyInfo.address || '';
+            document.getElementById('companyPhoneInput').value = companyInfo.phone || '';
+            document.getElementById('companyEmailInput').value = companyInfo.email || '';
+            document.getElementById('companyFooterInput').value = companyInfo.footer || '';
+            
+            // Ensure customInfo exists
+            if (!companyInfo.customInfo) {
+                companyInfo.customInfo = [];
+            }
+            
+            // Load custom info fields
+            renderCustomInfoFields();
+            
+            // Update logo preview in settings
+            const logoPreviewSettings = document.getElementById('logoPreviewSettings');
+            const logoPlaceholderSettings = document.querySelector('#logoPreviewSettings').parentElement.querySelector('.logo-placeholder');
+            
+            if (companyInfo.logo) {
+                logoPreviewSettings.src = companyInfo.logo;
+                logoPreviewSettings.style.display = 'block';
+                if (logoPlaceholderSettings) {
+                    logoPlaceholderSettings.style.display = 'none';
+                }
+            } else {
+                logoPreviewSettings.style.display = 'none';
+                if (logoPlaceholderSettings) {
+                    logoPlaceholderSettings.style.display = 'block';
+                }
+            }
+            
+            // Load products list
+            renderProductsList();
+        }
+        
+        // Save company settings - async with proper confirmation
+        async function saveCompanySettings() {
+            console.log("Saving company settings...");
+            
+            try {
+                // Get values from form
+                const companyName = document.getElementById('companyNameInput').value.trim();
+                const companyMotto = document.getElementById('companyMottoInput').value.trim();
+                const companyAddress = document.getElementById('companyAddressInput').value.trim();
+                const companyPhone = document.getElementById('companyPhoneInput').value.trim();
+                const companyEmail = document.getElementById('companyEmailInput').value.trim();
+                const companyFooter = document.getElementById('companyFooterInput').value.trim();
+                
+                console.log("Form values:", {
+                    name: companyName,
+                    motto: companyMotto,
+                    address: companyAddress,
+                    phone: companyPhone,
+                    email: companyEmail,
+                    footer: companyFooter
+                });
+                
+                // Validate required fields
+                if (!companyName) {
+                    showAlert('⚠️ Company Name is required!', 'error');
+                    return;
+                }
+                
+                if (!companyAddress) {
+                    showAlert('⚠️ Physical Address is required!', 'error');
+                    return;
+                }
+                
+                // Update company info object
+                companyInfo.name = companyName;
+                companyInfo.motto = companyMotto || "TIME TO DOMINATE!!";
+                companyInfo.address = companyAddress;
+                companyInfo.phone = companyPhone;
+                companyInfo.email = companyEmail;
+                companyInfo.footer = companyFooter || "Thank you for choosing PRINTWELL Factory! For inquiries, contact us at info@printwell.com";
+                
+                // Save to file system
+                await saveAllData();
+                
+                // Update UI immediately
+                updateCompanyUI();
+                
+                // Show success confirmation
+                showAlert('✅ Settings saved successfully!', 'success');
+                
+                // Close modal after a delay
+                setTimeout(() => {
+                    hideSettings();
+                }, 1500);
+                
+            } catch (error) {
+                console.error("Error saving company settings:", error);
+                showAlert('❌ Error saving settings: ' + (error && error.message ? error.message : error), 'error');
+            }
+        }
+        
+        // Logo upload
+        document.getElementById('logoUploadBtn').addEventListener('click', function() {
+            document.getElementById('logoFileInput').click();
+        });
+        
+        document.getElementById('logoUploadSettings').addEventListener('click', function() {
+            document.getElementById('logoFileInput').click();
+        });
+        
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    console.log("Logo uploaded, saving...");
+                    // Save to company info
+                    companyInfo.logo = e.target.result;
+                    
+                    // Save to localStorage
+                    localStorage.setItem('printwell_logo', e.target.result);
+                    saveAllData();
+                    
+                    // Update display
+                    updateLogoDisplay(e.target.result);
+                    
+                    alert('Logo uploaded and saved successfully!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Add new item - CHANGED: New items appear at the top
+        function addNewItem() {
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('itemsContainer').style.display = 'block';
+            
+            const itemId = itemIdCounter++;
+            const firstProduct = Object.values(products)[0];
+            const firstSize = Object.keys(firstProduct.sizes)[0];
+            const defaultSize = firstProduct.sizes[firstSize];
+            
+            const item = {
+                id: itemId,
+                productId: firstProduct.id,
+                size: firstSize,
+                width: defaultSize.width || '',
+                height: defaultSize.height || '',
+                widthUnit: 'IN',
+                heightUnit: 'IN',
+                unitPrice: firstProduct.price || 0,
+                quantity: 1
+            };
+            
+            // Add to beginning of array so it appears at top
+            invoiceItems.unshift(item);
+            renderItems();
+            calculateTotals();
+        }
+        
+        // Render all items - CHANGED: Newest items appear at top
+        function renderItems() {
+            const container = document.getElementById('itemsList');
+            const itemCount = document.getElementById('itemCount');
+            container.innerHTML = '';
+            
+            itemCount.textContent = invoiceItems.length;
+            
+            // Items are already in correct order (newest first due to unshift)
+            invoiceItems.forEach((item, index) => {
+                const product = products[item.productId] || products['flex'];
+                const sizeData = product.sizes[item.size] || { width: '', height: '' };
+                
+                const itemHtml = `
+                    <div class="item-card" data-item-id="${item.id}">
+                        <div class="item-header">
+                            <div class="item-title">
+                                ${product.name} - ${item.size}
+                                ${product.calculationType === 'fixed' && sizeData.fixedPrice ? 
+                                    `<span class="status-badge status-paid">Fixed: GH₵${sizeData.fixedPrice.toFixed(2)}</span>` : ''}
+                            </div>
+                            <button class="btn-remove" onclick="removeItem(${item.id})">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Product Selection -->
+                        <div class="mb-3">
+                            <label class="form-label">Product Type</label>
+                            <select class="form-select" onchange="changeProduct(${item.id}, this.value)">
+                                ${Object.values(products).map(p => `
+                                    <option value="${p.id}" ${item.productId === p.id ? 'selected' : ''}>
+                                        ${p.name} (${p.calculationType === 'fixed' ? 'Fixed Price' : 'Area-based'})
+                                    </option>
+                                `).join('')}
+                            </select>
+                        </div>
+                        
+                        <!-- Size Selection -->
+                        <div class="mb-3">
+                            <label class="form-label">Size</label>
+                            <div class="size-options">
+                                ${Object.entries(product.sizes).map(([sizeKey, sizeData]) => `
+                                    <div class="size-btn ${item.size === sizeKey ? 'active' : ''}" 
+                                         onclick="selectSize(${item.id}, '${sizeKey}', ${sizeData.width || 0}, ${sizeData.height || 0}, ${product.price || 0})">
+                                        ${sizeKey}
+                                        ${sizeKey !== 'Custom' && sizeData.width ? `<br><small>${sizeData.width}" × ${sizeData.height}"</small>` : ''}
+                                        ${sizeData.fixedPrice ? `<br><small>GH₵${sizeData.fixedPrice.toFixed(2)}</small>` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <!-- Dimensions Input -->
+                        <div class="dimensions-grid">
+                            <div>
+                                <label class="form-label">Width</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="form-control" 
+                                           value="${item.width || ''}" step="0.01" min="0.1"
+                                           onchange="updateItem(${item.id}, 'width', this.value)">
+                                    <select class="unit-select" 
+                                            onchange="updateItem(${item.id}, 'widthUnit', this.value)">
+                                        <option value="IN" ${item.widthUnit === 'IN' ? 'selected' : ''}>IN</option>
+                                        <option value="FT" ${item.widthUnit === 'FT' ? 'selected' : ''}>FT</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="form-label">Height</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="form-control" 
+                                           value="${item.height || ''}" step="0.01" min="0.1"
+                                           onchange="updateItem(${item.id}, 'height', this.value)">
+                                    <select class="unit-select" 
+                                            onchange="updateItem(${item.id}, 'heightUnit', this.value)">
+                                        <option value="IN" ${item.heightUnit === 'IN' ? 'selected' : ''}>IN</option>
+                                        <option value="FT" ${item.heightUnit === 'FT' ? 'selected' : ''}>FT</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Show unit price only for area-based products -->
+                            ${product.calculationType === 'area' ? `
+                            <div>
+                                <label class="form-label">Unit Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">GH₵</span>
+                                    <input type="number" class="form-control" 
+                                           value="${item.unitPrice}" step="0.01" min="0.01"
+                                           onchange="updateItem(${item.id}, 'unitPrice', this.value)">
+                                </div>
+                            </div>
+                            ` : `
+                            <div>
+                                <label class="form-label">Fixed Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">GH₵</span>
+                                    <input type="number" class="form-control" 
+                                           value="${product.sizes[item.size]?.fixedPrice || 0}" 
+                                           readonly style="background-color: #f8f9fa;">
+                                </div>
+                            </div>
+                            `}
+                            
+                            <div class="quantity-group">
+                                <label class="form-label">Quantity</label>
+                                <div class="input-with-unit">
+                                    <span class="quantity-symbol">×</span>
+                                    <input type="number" class="form-control quantity-input" 
+                                           value="${item.quantity}" min="1"
+                                           onchange="updateItem(${item.id}, 'quantity', this.value)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.innerHTML += itemHtml;
+            });
+        }
+        
+        // Change product
+        function changeProduct(itemId, productId) {
+            const item = invoiceItems.find(i => i.id === itemId);
+            if (item && products[productId]) {
+                item.productId = productId;
+                const product = products[productId];
+                item.size = Object.keys(product.sizes)[0];
+                const defaultSize = product.sizes[item.size];
+                item.width = defaultSize.width || '';
+                item.height = defaultSize.height || '';
+                item.unitPrice = product.price || 0;
+                
+                renderItems();
+                calculateTotals();
+            }
+        }
+        
+        // Select size
+        function selectSize(itemId, size, width, height, price) {
+            const item = invoiceItems.find(i => i.id === itemId);
+            if (item) {
+                item.size = size;
+                item.width = width || '';
+                item.height = height || '';
+                if (price) item.unitPrice = price;
+                
+                renderItems();
+                calculateTotals();
+            }
+        }
+        
+        // Update item property
+        function updateItem(itemId, property, value) {
+            const item = invoiceItems.find(i => i.id === itemId);
+            if (item) {
+                if (property === 'width' || property === 'height' || property === 'unitPrice') {
+                    item[property] = parseFloat(value) || 0;
+                } else if (property === 'quantity') {
+                    item[property] = parseInt(value) || 1;
+                } else {
+                    item[property] = value;
+                }
+                
+                calculateTotals();
+            }
+        }
+        
+        // Remove item
+        function removeItem(itemId) {
+            invoiceItems = invoiceItems.filter(i => i.id !== itemId);
+            
+            if (invoiceItems.length === 0) {
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('itemsContainer').style.display = 'none';
+            } else {
+                renderItems();
+            }
+            
+            calculateTotals();
+        }
+        
+        // Calculate item total
+        function calculateItemTotal(item) {
+            const product = products[item.productId] || products['flex'];
+            const sizeData = product.sizes[item.size] || { width: '', height: '' };
+            
+            // FIXED PRICE CALCULATION
+            if (product.calculationType === 'fixed' && sizeData.fixedPrice) {
+                return sizeData.fixedPrice * item.quantity;
+            }
+            
+            // AREA-BASED CALCULATION
+            // Validate inputs
+            const width = parseFloat(item.width) || 0;
+            const height = parseFloat(item.height) || 0;
+            if (width <= 0 || height <= 0) return 0;
+            
+            // Convert to feet
+            const widthFt = item.widthUnit === 'IN' ? width / 12 : width;
+            const heightFt = item.heightUnit === 'IN' ? height / 12 : height;
+            
+            // Custom formula
+            if (product.formula) {
+                try {
+                    let formula = product.formula
+                        .replace(/{w}/g, widthFt)
+                        .replace(/{h}/g, heightFt)
+                        .replace(/{p}/g, item.unitPrice)
+                        .replace(/{q}/g, item.quantity);
+                    
+                    return eval(formula);
+                } catch (e) {
+                    console.error('Formula error:', e);
+                }
+            }
+            
+            // Default area formula
+            const areaSqFt = widthFt * heightFt;
+            return areaSqFt * item.unitPrice * item.quantity;
+        }
+        
+        // Calculate totals
+        function calculateTotals() {
+            let subtotal = 0;
+            
+            invoiceItems.forEach(item => {
+                subtotal += calculateItemTotal(item);
+            });
+            
+            const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+            const taxAmount = subtotal * (taxRate / 100);
+            const grandTotal = subtotal + taxAmount;
+            
+            document.getElementById('subtotal').textContent = formatCurrency(subtotal);
+            document.getElementById('taxAmount').textContent = formatCurrency(taxAmount);
+            document.getElementById('grandTotal').textContent = formatCurrency(grandTotal);
+            
+            return { subtotal, taxAmount, grandTotal };
+        }
+        
+        // Save invoice to history - UPDATED: Now asks for filename
+        function saveInvoiceToHistory() {
+            const customerName = document.getElementById('customerName').value;
+            const customerPhone = document.getElementById('customerPhone').value;
+            const invoiceStatus = document.getElementById('invoiceStatus').value;
+            
+            if (!customerName) {
+                alert('Please enter customer name');
+                return;
+            }
+            
+            if (invoiceItems.length === 0) {
+                alert('Please add at least one item');
+                return;
+            }
+            
+            // Ask for filename
+            const fileName = prompt('Enter filename for this invoice:', `Invoice_${customerName}_${new Date().toISOString().slice(0, 10)}`);
+            
+            if (!fileName) {
+                alert('Invoice save cancelled');
+                return;
+            }
+            
+            const totals = calculateTotals();
+            const invoiceNotes = document.getElementById('invoiceNotes').value;
+            const taxRate = document.getElementById('taxRate').value;
+            
+            const invoice = {
+                id: 'INV-' + Date.now().toString().slice(-8),
+                fileName: fileName,
+                date: new Date().toISOString(),
+                customerName: customerName,
+                customerPhone: customerPhone,
+                items: invoiceItems.map(item => ({
+                    ...item,
+                    productName: (products[item.productId] || products['flex']).name,
+                    itemTotal: calculateItemTotal(item)
+                })),
+                subtotal: totals.subtotal,
+                taxRate: taxRate,
+                taxAmount: totals.taxAmount,
+                grandTotal: totals.grandTotal,
+                notes: invoiceNotes,
+                status: invoiceStatus
+            };
+
+            // Build a search index for quick searching/filtering
+            invoice.searchIndex = buildInvoiceSearchIndex(invoice);
+            
+            invoiceHistory.unshift(invoice);
+            saveAllData();
+            renderInvoiceHistory();
+            
+            // Ask to also save a local copy
+            if (confirm('Also save a local copy of this invoice?')) {
+                saveInvoiceAsPDF(invoice, fileName);
+            }
+
+            alert(`Invoice "${fileName}" saved to history!\n\nYou can view it in the "Invoice History" tab.`);
+        }
+        
+        // Helper: save HTML content to a file (IPC if available, otherwise browser download)
+        function saveHtmlFile(htmlContent, filename) {
+            const safeName = (filename || 'invoice') + '.html';
+            if (window.electronAPI && typeof window.electronAPI.saveInvoiceFile === 'function') {
+                // Expecting saveInvoiceFile(html, filename)
+                window.electronAPI.saveInvoiceFile(htmlContent, safeName).then(() => {
+                    showAlert('✅ Saved local copy: ' + safeName, 'success');
+                }).catch(err => {
+                    console.error('Error saving file via electronAPI:', err);
+                    showAlert('❌ Failed to save local copy: ' + (err && err.message ? err.message : err), 'error');
+                });
+            } else {
+                // Fallback: trigger browser download of HTML file
+                try {
+                    const blob = new Blob([htmlContent], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = safeName;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    URL.revokeObjectURL(url);
+                    showAlert('✅ Download started: ' + safeName, 'success');
+                } catch (err) {
+                    console.error('Download error:', err);
+                    showAlert('❌ Failed to download file: ' + (err && err.message ? err.message : err), 'error');
+                }
+            }
+        }
+
+        // Save invoice as PDF/HTML (attempts to save a local copy). Accepts optional invoice object and filename.
+        function saveInvoiceAsPDF(invoiceObj = null, fileName = null) {
+            // If no invoice object provided, build from current form
+            let invoiceToSave = invoiceObj;
+            if (!invoiceToSave) {
+                const customerName = document.getElementById('customerName').value;
+                const customerPhone = document.getElementById('customerPhone').value;
+                const invoiceNotes = document.getElementById('invoiceNotes').value;
+                const invoiceStatus = document.getElementById('invoiceStatus').value;
+                const totals = calculateTotals();
+                const taxRate = document.getElementById('taxRate').value;
+
+                invoiceToSave = {
+                    id: 'INV-' + Date.now().toString().slice(-8),
+                    fileName: fileName || `Invoice_${customerName}_${new Date().toISOString().slice(0,10)}`,
+                    date: new Date().toISOString(),
+                    customerName: customerName,
+                    customerPhone: customerPhone,
+                    items: invoiceItems.map(item => ({
+                        ...item,
+                        productName: (products[item.productId] || products['flex']).name,
+                        itemTotal: calculateItemTotal(item)
+                    })),
+                    subtotal: totals.subtotal,
+                    taxRate: taxRate,
+                    taxAmount: totals.taxAmount,
+                    grandTotal: totals.grandTotal,
+                    notes: invoiceNotes,
+                    status: invoiceStatus
+                };
+            }
+
+            const content = generateInvoiceContentFromInvoice(invoiceToSave);
+            const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${invoiceToSave.fileName || invoiceToSave.id}</title></head><body>${content}</body></html>`;
+
+            saveHtmlFile(html, fileName || invoiceToSave.fileName || invoiceToSave.id);
+        }
+        
+        // Render invoice history
+        function renderInvoiceHistory() {
+            const container = document.getElementById('invoiceHistory');
+            container.innerHTML = '';
+            const query = (document.getElementById('invoiceHistorySearch') && document.getElementById('invoiceHistorySearch').value || '').trim().toLowerCase();
+
+            invoiceHistory.forEach(invoice => {
+                // Ensure older invoices have a searchIndex
+                if (!invoice.searchIndex) invoice.searchIndex = buildInvoiceSearchIndex(invoice);
+                if (query && invoice.searchIndex.indexOf(query) === -1) return; // skip non-matching
+                const date = new Date(invoice.date).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${invoice.fileName || invoice.id}</td>
+                    <td>${invoice.customerName}</td>
+                    <td>${date}</td>
+                    <td>${getStatusBadge(invoice.status)}</td>
+                    <td>${formatCurrency(invoice.grandTotal)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="viewInvoice('${invoice.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="printInvoiceFromHistory('${invoice.id}')">
+                            <i class="fas fa-print"></i>
+                        </button>
+                        <button class="btn btn-sm btn-success" onclick="saveInvoiceFromHistoryAsPDF('${invoice.id}')">
+                            <i class="fas fa-save"></i> PDF
+                        </button>
+                    </td>
+                `;
+                container.appendChild(row);
+            });
+        }
+        
+        // Generate invoice HTML from an invoice object (read-only preview)
+        function generateInvoiceContentFromInvoice(invoice) {
+            const totals = {
+                subtotal: invoice.subtotal || 0,
+                taxAmount: invoice.taxAmount || 0,
+                grandTotal: invoice.grandTotal || 0
+            };
+
+            let companyInfoHtml = `
+                <div style="font-size: 11px; color: #666;">
+                    ${companyInfo.address}<br>
+                    Phone: ${companyInfo.phone}${companyInfo.email ? ` | Email: ${companyInfo.email}` : ''}
+            `;
+            companyInfo.customInfo.forEach(info => {
+                if (info.label && info.value) companyInfoHtml += `<br>${info.label}: ${info.value}`;
+            });
+            companyInfoHtml += `</div>`;
+
+            let customerInfoHtml = `
+                <strong>${invoice.customerName}</strong><br>
+                ${invoice.customerPhone ? `Phone: ${invoice.customerPhone}<br>` : ''}
+                Date: ${new Date(invoice.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+            `;
+
+            let content = `
+                <div class="invoice-header" style="text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #333;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px;">
+                        ${companyInfo.logo ? `<img src="${companyInfo.logo}" alt="Logo" style="max-height: 60px;">` : ''}
+                        <div>
+                            <h1 style="margin: 0; font-size: 24px; color: #1a365d;">${companyInfo.name}</h1>
+                            <p style="margin: 5px 0; color: #666; font-weight: bold;">${companyInfo.motto}</p>
+                        </div>
+                    </div>
+                    ${companyInfoHtml}
+                </div>
+
+                <div class="customer-info" style="margin-bottom: 20px; display: flex; justify-content: space-between;">
+                    <div class="info-box">
+                        <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #333;">Bill To:</h3>
+                        ${customerInfoHtml}
+                    </div>
+                    <div class="info-box" style="text-align: right;">
+                        <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #333;">Invoice</h3>
+                        <strong>${invoice.fileName || invoice.id}</strong><br>
+                        Status: ${getStatusDisplay(invoice.status)}
+                    </div>
+                </div>
+
+                <table class="invoice-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 11px;">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%; border: 1px solid #ddd; padding: 8px; background-color: #f5f5f5; text-align: left;">#</th>
+                            <th style="width: 30%; border: 1px solid #ddd; padding: 8px; background-color: #f5f5f5; text-align: left;">Item Description</th>
+                            <th style="width: 15%; border: 1px solid #ddd; padding: 8px; background-color: #f5f5f5; text-align: left;">Size</th>
+                            <th style="width: 10%; border: 1px solid #ddd; padding: 8px; background-color: #f5f5f5; text-align: left;">Qty</th>
+                            <th style="width: 15%; border: 1px solid #ddd; padding: 8px; background-color: #f5f5f5; text-align: left;">Unit Price</th>
+                            <th style="width: 15%; border: 1px solid #ddd; padding: 8px; background-color: #f5f5f5; text-align: left;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+            (invoice.items || []).forEach((item, index) => {
+                const product = (item.productId && products[item.productId]) ? products[item.productId] : Object.values(products).find(p => p.name === item.productName) || products['flex'];
+                const width = item.width || '';
+                const height = item.height || '';
+                const widthUnit = item.widthUnit || 'IN';
+                const heightUnit = item.heightUnit || 'IN';
+                const qty = item.quantity || 1;
+                const unitPrice = item.unitPrice || (product.price || 0);
+                const itemTotal = item.itemTotal || calculateItemTotal({ ...item, unitPrice });
+
+                let description = product.name + (item.size ? ` - ${item.size}` : '');
+                let unitPriceText = product.calculationType === 'fixed' ? formatCurrency((product.sizes[item.size] && product.sizes[item.size].fixedPrice) || 0) : `${formatCurrency(unitPrice)}/sq ft`;
+
+                content += `
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;">${index + 1}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">${description}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">${width}${widthUnit} × ${height}${heightUnit}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">× ${qty}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">${unitPriceText}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">${formatCurrency(itemTotal)}</td>
+                    </tr>`;
+            });
+
+            content += `
+                    </tbody>
+                </table>
+
+                <div class="summary" style="margin-top: 20px; text-align: right; font-size: 12px;">
+                    <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>Subtotal:</span>
+                        <span>${formatCurrency(totals.subtotal)}</span>
+                    </div>
+                    <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>Tax (${invoice.taxRate || '0'}%):</span>
+                        <span>${formatCurrency(totals.taxAmount)}</span>
+                    </div>
+                    <div class="summary-row total-row" style="display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; margin-top: 10px; padding-top: 10px; border-top: 2px solid #333;">
+                        <span>GRAND TOTAL:</span>
+                        <span>${formatCurrency(totals.grandTotal)}</span>
+                    </div>
+                </div>
+
+                ${invoice.notes ? `
+                <div class="notes" style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 11px;">
+                    <strong>Notes:</strong><br>
+                    ${invoice.notes}
+                </div>
+                ` : ''}
+
+                <div class="footer" style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 10px; color: #666; text-align: center;">
+                    ${companyInfo.footer}
+                </div>`;
+
+            return content;
+        }
+
+        // View invoice - open read-only preview window
+        function viewInvoice(invoiceId) {
+            const invoice = invoiceHistory.find(inv => inv.id === invoiceId);
+            if (!invoice) {
+                showAlert('Invoice not found', 'error');
+                return;
+            }
+
+            const content = generateInvoiceContentFromInvoice(invoice);
+            const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${invoice.fileName || invoice.id}</title>
+                <style>body{font-family: Arial, sans-serif; padding:20px; color:#000;} .no-print{display:none}</style>
+                </head><body>${content}
+                <div style="margin-top:20px; text-align:center;">
+                    <button onclick="window.print()" style="padding:8px 12px; margin-right:8px;">Print</button>
+                    <button onclick="window.close()" style="padding:8px 12px;">Close</button>
+                </div>
+                </body></html>`;
+
+            const win = window.open('', '_blank');
+            win.document.write(html);
+            win.document.close();
+        }
+        
+        // Print invoice from history
+        function printInvoiceFromHistory(invoiceId) {
+            const invoice = invoiceHistory.find(inv => inv.id === invoiceId);
+            if (invoice) {
+                // Temporarily load the invoice
+                const currentItems = [...invoiceItems];
+                const currentCustomerName = document.getElementById('customerName').value;
+                const currentCustomerPhone = document.getElementById('customerPhone').value;
+                const currentNotes = document.getElementById('invoiceNotes').value;
+                const currentTaxRate = document.getElementById('taxRate').value;
+                const currentStatus = document.getElementById('invoiceStatus').value;
+                
+                // Set values for printing
+                document.getElementById('customerName').value = invoice.customerName;
+                document.getElementById('customerPhone').value = invoice.customerPhone;
+                document.getElementById('invoiceNotes').value = invoice.notes;
+                document.getElementById('taxRate').value = invoice.taxRate;
+                document.getElementById('invoiceStatus').value = invoice.status;
+                
+                invoiceItems = invoice.items;
+                
+                // Print
+                printInvoice();
+                
+                // Restore original values
+                setTimeout(() => {
+                    invoiceItems = currentItems;
+                    document.getElementById('customerName').value = currentCustomerName;
+                    document.getElementById('customerPhone').value = currentCustomerPhone;
+                    document.getElementById('invoiceNotes').value = currentNotes;
+                    document.getElementById('taxRate').value = currentTaxRate;
+                    document.getElementById('invoiceStatus').value = currentStatus;
+                    renderItems();
+                    calculateTotals();
+                }, 1000);
+            }
+        }
+        
+        // Save invoice from history as PDF
+        function saveInvoiceFromHistoryAsPDF(invoiceId) {
+            const invoice = invoiceHistory.find(inv => inv.id === invoiceId);
+            if (!invoice) {
+                showAlert('Invoice not found', 'error');
+                return;
+            }
+
+            const fileName = prompt('Enter filename to save as:', invoice.fileName || invoice.id);
+            if (!fileName) return;
+
+            // Save local copy
+            saveInvoiceAsPDF(invoice, fileName);
+
+            // Optionally save to history as a new entry with that filename
+            if (confirm('Also save this as a new history entry?')) {
+                const newInvoice = { ...invoice, fileName: fileName, date: new Date().toISOString(), id: 'INV-' + Date.now().toString().slice(-8) };
+                newInvoice.searchIndex = buildInvoiceSearchIndex(newInvoice);
+                invoiceHistory.unshift(newInvoice);
+                saveAllData();
+                renderInvoiceHistory();
+                showAlert(`Saved as "${fileName}" and added to history.`, 'success');
+            }
+        }
+        
+        // Build a lowercase searchable index string for an invoice
+        function buildInvoiceSearchIndex(invoice) {
+            const parts = [];
+            if (invoice.fileName) parts.push(invoice.fileName);
+            if (invoice.id) parts.push(invoice.id);
+            if (invoice.customerName) parts.push(invoice.customerName);
+            if (invoice.customerPhone) parts.push(invoice.customerPhone);
+            if (invoice.status) parts.push(invoice.status);
+            if (invoice.notes) parts.push(invoice.notes);
+            (invoice.items || []).forEach(item => {
+                if (item.productName) parts.push(item.productName);
+                if (item.size) parts.push(item.size);
+                if (item.description) parts.push(item.description);
+            });
+            // join and normalize
+            return parts.join(' ').toLowerCase();
+        }
+
+        // Simple debounce helper
+        function debounce(fn, delay) {
+            let t;
+            return function(...args) {
+                clearTimeout(t);
+                t = setTimeout(() => fn.apply(this, args), delay);
+            };
+        }
+
+        // Wire up search input for invoice history
+        function setupInvoiceHistorySearch() {
+            const el = document.getElementById('invoiceHistorySearch');
+            if (!el) return;
+            const handler = debounce(() => renderInvoiceHistory(), 200);
+            el.addEventListener('input', handler);
+        }
+
+        function clearInvoiceHistorySearch() {
+            const el = document.getElementById('invoiceHistorySearch');
+            if (el) {
+                el.value = '';
+                renderInvoiceHistory();
+            }
+        }
+
+        // Generate invoice content for printing/PDF
+        function generateInvoiceContent() {
+            const customerName = document.getElementById('customerName').value;
+            const customerPhone = document.getElementById('customerPhone').value;
+            const invoiceNotes = document.getElementById('invoiceNotes').value;
+            const invoiceStatus = document.getElementById('invoiceStatus').value;
+            const totals = calculateTotals();
+            
+            // Build company info section with custom fields
+            let companyInfoHtml = `
+                <div style="font-size: 11px; color: #666;">
+                    ${companyInfo.address}<br>
+                    Phone: ${companyInfo.phone}${companyInfo.email ? ` | Email: ${companyInfo.email}` : ''}
+            `;
+            
+            // Add custom info fields
+            companyInfo.customInfo.forEach(info => {
+                if (info.label && info.value) {
+                    companyInfoHtml += `<br>${info.label}: ${info.value}`;
+                }
+            });
+            
+            companyInfoHtml += `</div>`;
+            
+            // Build customer info section
+            let customerInfoHtml = `
+                <strong>${customerName}</strong><br>
+                ${customerPhone ? `Phone: ${customerPhone}<br>` : ''}
+                Date: ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+            `;
+            
+            let content = `
+                <div class="invoice-header" style="text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #333;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px;">
+                        ${companyInfo.logo ? `<img src="${companyInfo.logo}" alt="Logo" style="max-height: 60px;">` : ''}
+                        <div>
+                            <h1 style="margin: 0; font-size: 24px; color: #1a365d;">${companyInfo.name}</h1>
+                            <p style="margin: 5px 0; color: #666; font-weight: bold;">${companyInfo.motto}</p>
+                        </div>
+                    </div>
+                    ${companyInfoHtml}
+                </div>
+                
+                <div class="customer-info" style="margin-bottom: 20px; display: flex; justify-content: space-between;">
+                    <div class="info-box">
+                        <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #333;">Bill To:</h3>
+                        ${customerInfoHtml}
+                    </div>
+                    <div class="info-box" style="text-align: right;">
+                        <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #333;">Invoice</h3>
+                        <strong>INV-${Date.now().toString().slice(-6)}</strong><br>
+                        Status: ${getStatusDisplay(invoiceStatus)}
+                    </div>
+                </div>
+                
+                <table class="invoice-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 11px;">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%; border: 1px solid #ddd; padding: 8px; background-color: #f5f5f5; text-align: left;">#</th>
+                            <th style="width: 30%; border: 1px solid #ddd; padding: 8px; background-color: #f5f5f5; text-align: left;">Item Description</th>
+                            <th style="width: 15%; border: 1px solid #ddd; padding: 8px; background-color: #f5f5f5; text-align: left;">Size</th>
+                            <th style="width: 10%; border: 1px solid #ddd; padding: 8px; background-color: #f5f5f5; text-align: left;">Qty</th>
+                            <th style="width: 15%; border: 1px solid #ddd; padding: 8px; background-color: #f5f5f5; text-align: left;">Unit Price</th>
+                            <th style="width: 15%; border: 1px solid #ddd; padding: 8px; background-color: #f5f5f5; text-align: left;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+            
+            invoiceItems.forEach((item, index) => {
+                const product = products[item.productId] || products['flex'];
+                const itemTotal = calculateItemTotal(item);
+                const sizeData = product.sizes[item.size] || {};
+                
+                let description = product.name;
+                let unitPriceText = '';
+                
+                if (product.calculationType === 'fixed') {
+                    description += ` - ${item.size}`;
+                    unitPriceText = formatCurrency(sizeData.fixedPrice || 0);
+                } else {
+                    description += ` - ${item.size}`;
+                    unitPriceText = `${formatCurrency(item.unitPrice)}/sq ft`;
+                }
+                
+                content += `
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;">${index + 1}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">${description}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">${item.width}${item.widthUnit} × ${item.height}${item.heightUnit}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">× ${item.quantity}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">${unitPriceText}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">${formatCurrency(itemTotal)}</td>
+                    </tr>`;
+            });
+            
+            content += `
+                    </tbody>
+                </table>
+                
+                <div class="summary" style="margin-top: 20px; text-align: right; font-size: 12px;">
+                    <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>Subtotal:</span>
+                        <span>${formatCurrency(totals.subtotal)}</span>
+                    </div>
+                    <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>Tax (${document.getElementById('taxRate').value || '0'}%):</span>
+                        <span>${formatCurrency(totals.taxAmount)}</span>
+                    </div>
+                    <div class="summary-row total-row" style="display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; margin-top: 10px; padding-top: 10px; border-top: 2px solid #333;">
+                        <span>GRAND TOTAL:</span>
+                        <span>${formatCurrency(totals.grandTotal)}</span>
+                    </div>
+                </div>
+                
+                ${invoiceNotes ? `
+                <div class="notes" style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 11px;">
+                    <strong>Notes:</strong><br>
+                    ${invoiceNotes}
+                </div>
+                ` : ''}
+                
+                <div class="footer" style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 10px; color: #666; text-align: center;">
+                    ${companyInfo.footer}
+                </div>`;
+            
+            return content;
+        }
+        
+        // Product management functions
+        function addNewProduct() {
+            editingProductId = null;
+            document.getElementById('productName').value = '';
+            document.getElementById('productCalculationType').value = 'area';
+            document.getElementById('productPrice').value = '3.5';
+            document.getElementById('productFormula').value = '';
+            document.getElementById('productSizes').value = '';
+            
+            // Clear fixed price sizes container
+            const fixedPriceContainer = document.getElementById('fixedPriceSizes');
+            if (fixedPriceContainer) {
+                fixedPriceContainer.innerHTML = '';
+            }
+            
+            toggleCalculationTypeFields();
+            document.getElementById('productForm').style.display = 'block';
+        }
+        
+        function editProduct(productId) {
+            const product = products[productId];
+            if (product) {
+                editingProductId = productId;
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productCalculationType').value = product.calculationType || 'area';
+                document.getElementById('productPrice').value = product.price || '3.5';
+                document.getElementById('productFormula').value = product.formula || '';
+                
+                // Convert sizes to string
+                const sizesArray = [];
+                for (const [name, size] of Object.entries(product.sizes)) {
+                    if (name !== 'Custom') {
+                        if (product.calculationType === 'fixed' && size.fixedPrice) {
+                            sizesArray.push(`${name}:${size.width || ''}x${size.height || ''}:${size.fixedPrice}`);
+                        } else {
+                            sizesArray.push(`${name}:${size.width || ''}x${size.height || ''}`);
+                        }
+                    }
+                }
+                document.getElementById('productSizes').value = sizesArray.join(', ');
+                
+                // For fixed price products, populate fixed price fields
+                if (product.calculationType === 'fixed') {
+                    const fixedPriceContainer = document.getElementById('fixedPriceSizes');
+                    fixedPriceContainer.innerHTML = '';
+                    
+                    for (const [name, size] of Object.entries(product.sizes)) {
+                        if (name !== 'Custom' && size.fixedPrice) {
+                            addFixedPriceSize(name, size.width, size.height, size.fixedPrice);
+                        }
+                    }
+                }
+                
+                toggleCalculationTypeFields();
+                document.getElementById('productForm').style.display = 'block';
+            }
+        }
+        
+        // FIXED: Delete product function
+        async function deleteProduct(productId) {
+            console.log("Deleting product:", productId, products[productId]);
+            
+            // Check if it's a built-in product
+            const builtInProducts = ['poster', 'flex', 'sticker_area'];
+            if (builtInProducts.includes(productId)) {
+                showAlert('⚠️ Built-in products cannot be deleted.', 'error');
+                return;
+            }
+            
+            // Get product name before deletion
+            const product = products[productId];
+            if (!product) {
+                showAlert('❌ Product not found!', 'error');
+                return;
+            }
+            
+            if (confirm(`Delete product "${product.name}"? This action cannot be undone.`)) {
+                try {
+                    // Remove the product
+                    delete products[productId];
+                    
+                    // Save to file system (use IPC if available, otherwise fall back)
+                    if (window.electronAPI && typeof window.electronAPI.saveProducts === 'function') {
+                        await window.electronAPI.saveProducts(products);
+                    } else {
+                        await saveAllData();
+                    }
+                    
+                    // Update the products list
+                    renderProductsList();
+                    
+                    // Refresh any open invoice items that might be using this product
+                    if (invoiceItems.length > 0) {
+                        const itemsUsingProduct = invoiceItems.filter(item => item.productId === productId);
+                        if (itemsUsingProduct.length > 0) {
+                            // Replace with first available product
+                            const firstProductId = Object.keys(products)[0];
+                            if (firstProductId) {
+                                invoiceItems.forEach(item => {
+                                    if (item.productId === productId) {
+                                        item.productId = firstProductId;
+                                        const newProduct = products[firstProductId];
+                                        item.size = Object.keys(newProduct.sizes)[0];
+                                        const defaultSize = newProduct.sizes[item.size];
+                                        item.width = defaultSize.width || '';
+                                        item.height = defaultSize.height || '';
+                                        item.unitPrice = newProduct.price || 0;
+                                    }
+                                });
+                                renderItems();
+                                calculateTotals();
+                            }
+                        }
+                    }
+                    
+                    showAlert(`✅ Product "${product.name}" has been deleted.`, 'success');
+                    
+                } catch (error) {
+                    console.error("Error deleting product:", error);
+                    showAlert('❌ Error deleting product: ' + (error && error.message ? error.message : error), 'error');
+                }
+            }
+        }
+        
+        function toggleCalculationTypeFields() {
+            const calculationType = document.getElementById('productCalculationType').value;
+            const areaFields = document.getElementById('areaFields');
+            const fixedFields = document.getElementById('fixedFields');
+            
+            if (calculationType === 'area') {
+                areaFields.style.display = 'block';
+                fixedFields.style.display = 'none';
+            } else {
+                areaFields.style.display = 'none';
+                fixedFields.style.display = 'block';
+            }
+        }
+        
+        function addFixedPriceSize(name = '', width = '', height = '', price = '') {
+            const container = document.getElementById('fixedPriceSizes');
+            const div = document.createElement('div');
+            div.className = 'input-group mb-2';
+            div.innerHTML = `
+                <input type="text" class="form-control" placeholder="Size Name" value="${name}">
+                <input type="number" class="form-control" placeholder="Width" value="${width}" step="0.01">
+                <input type="number" class="form-control" placeholder="Height" value="${height}" step="0.01">
+                <span class="input-group-text">GH₵</span>
+                <input type="number" class="form-control" placeholder="Price" value="${price}" step="0.01">
+                <button class="btn btn-outline-danger" type="button" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            container.appendChild(div);
+        }
+        
+        async function saveProduct() {
+            try {
+                const name = document.getElementById('productName').value.trim();
+                const calculationType = document.getElementById('productCalculationType').value;
+                const price = parseFloat(document.getElementById('productPrice').value) || 0;
+                const formula = document.getElementById('productFormula').value.trim() || null;
+                const sizesText = document.getElementById('productSizes').value.trim();
+                
+                if (!name) {
+                    showAlert('⚠️ Please enter product name', 'error');
+                    return;
+                }
+                
+                // Parse sizes
+                const sizes = {
+                    'Custom': { width: '', height: '' }
+                };
+                
+                // Add sizes from text input
+                if (sizesText) {
+                    const sizeEntries = sizesText.split(',').map(s => s.trim());
+                    sizeEntries.forEach(entry => {
+                        if (entry.includes(':')) {
+                            const [sizeName, dimensions] = entry.split(':');
+                            const [width, height] = dimensions.split('x').map(d => parseFloat(d.trim()) || '');
+                            if (sizeName) {
+                                sizes[sizeName.trim()] = { 
+                                    width: width || '', 
+                                    height: height || '' 
+                                };
+                            }
+                        }
+                    });
+                }
+                
+                // Add fixed prices from input fields
+                if (calculationType === 'fixed') {
+                    const fixedPriceInputs = document.querySelectorAll('#fixedPriceSizes .input-group');
+                    fixedPriceInputs.forEach(input => {
+                        const inputs = input.querySelectorAll('input');
+                        const sizeName = inputs[0] ? inputs[0].value.trim() : '';
+                        const width = inputs[1] ? parseFloat(inputs[1].value) || '' : '';
+                        const height = inputs[2] ? parseFloat(inputs[2].value) || '' : '';
+                        // The price input is the last input in the group (index 3)
+                        const fixedPrice = inputs[3] ? parseFloat(inputs[3].value) || 0 : 0;
+                        
+                        if (sizeName) {
+                            sizes[sizeName] = { 
+                                width: width, 
+                                height: height, 
+                                fixedPrice: fixedPrice 
+                            };
+                        }
+                    });
+                }
+                
+                // Generate ID
+                const productId = editingProductId || name.toLowerCase().replace(/\s+/g, '_');
+                
+                // Save product
+                products[productId] = {
+                    id: productId,
+                    name: name,
+                    calculationType: calculationType,
+                    price: calculationType === 'area' ? price : 0,
+                    formula: formula,
+                    sizes: sizes
+                };
+                
+                // Save to file system (use IPC if available, otherwise fall back)
+                if (window.electronAPI && typeof window.electronAPI.saveProducts === 'function') {
+                    await window.electronAPI.saveProducts(products);
+                } else {
+                    await saveAllData();
+                }
+                
+                renderProductsList();
+                cancelProduct();
+                
+                showAlert(`✅ Product "${name}" saved successfully!`, 'success');
+                
+            } catch (error) {
+                console.error("Error saving product:", error);
+                showAlert('❌ Error saving product: ' + (error && error.message ? error.message : error), 'error');
+            }
+        }
+        
+        function cancelProduct() {
+            // Hide the form
+            document.getElementById('productForm').style.display = 'none';
+            
+            // Reset all form fields
+            document.getElementById('productName').value = '';
+            document.getElementById('productCalculationType').value = 'area';
+            document.getElementById('productPrice').value = '3.5';
+            document.getElementById('productFormula').value = '';
+            document.getElementById('productSizes').value = '';
+            
+            // Clear fixed price sizes
+            const fixedPriceContainer = document.getElementById('fixedPriceSizes');
+            if (fixedPriceContainer) {
+                fixedPriceContainer.innerHTML = '';
+            }
+            
+            // Reset calculation type display
+            const areaFields = document.getElementById('areaFields');
+            const fixedFields = document.getElementById('fixedFields');
+            if (areaFields && fixedFields) {
+                areaFields.style.display = 'block';
+                fixedFields.style.display = 'none';
+            }
+            
+            editingProductId = null;
+        }
+        
+        // FIXED: Render products list with proper delete button
+        function renderProductsList() {
+            const container = document.getElementById('productsList');
+            container.innerHTML = '';
+            
+            Object.values(products).forEach(product => {
+                const row = document.createElement('tr');
+                const builtInProducts = ['poster', 'flex', 'sticker_area'];
+                const isBuiltIn = builtInProducts.includes(product.id);
+                
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${product.calculationType === 'fixed' ? 'Fixed Price' : 'Area-based'}</td>
+                    <td>
+                        ${product.calculationType === 'fixed' ? 
+                            Object.entries(product.sizes)
+                                .filter(([name]) => name !== 'Custom')
+                                .map(([name, size]) => `${name}: GH₵${size.fixedPrice || 0}`)
+                                .join(', ') :
+                            `GH₵${product.price}/sq ft`
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editProduct('${product.id}')" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteProduct('${product.id}')" 
+                            ${isBuiltIn ? 'disabled style="opacity: 0.5;"' : ''} title="${isBuiltIn ? 'Built-in product cannot be deleted' : 'Delete'}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                container.appendChild(row);
+            });
+        }
+        
+        // Printer functions
+        function showPrintDialog() {
+            const customerName = document.getElementById('customerName').value;
+            
+            if (!customerName) {
+                alert('Please enter customer name');
+                return;
+            }
+            
+            if (invoiceItems.length === 0) {
+                alert('Please add at least one item');
+                return;
+            }
+            
+            printInvoice();
+        }
+        
+        function printInvoice() {
+            const invoiceContent = generateInvoiceContent();
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>PRINTWELL Invoice</title>
+                    <style>
+                        @media print {
+                            @page {
+                                size: A4;
+                                margin: 20mm;
+                            }
+                            body {
+                                font-family: Arial, sans-serif;
+                                font-size: 12px;
+                            }
+                        }
+                        
+                        body {
+                            font-family: Arial, sans-serif;
+                            font-size: 12px;
+                            margin: 0;
+                            padding: 20mm;
+                            color: #000;
+                        }
+                        
+                        @media print {
+                            .no-print {
+                                display: none !important;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${invoiceContent}
+                    <div class="no-print" style="margin-top: 20px; text-align: center;">
+                        <button onclick="window.print()" style="padding: 10px 20px; background: #0066ff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            Print Invoice
+                        </button>
+                        <button onclick="window.close()" style="padding: 10px 20px; background: #666; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">
+                            Close
+                        </button>
+                    </div>
+                    <script>
+                        window.onload = function() {
+                            setTimeout(() => {
+                                window.print();
+                            }, 500);
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+        
+        function clearAll() {
+            if (confirm('Clear all items and start over?')) {
+                invoiceItems = [];
+                document.getElementById('customerName').value = '';
+                document.getElementById('customerPhone').value = '';
+                document.getElementById('invoiceNotes').value = '';
+                document.getElementById('taxRate').value = '0';
+                document.getElementById('invoiceStatus').value = 'pending';
+                
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('itemsContainer').style.display = 'none';
+                
+                calculateTotals();
+            }
+        }
+        
+        // Helper functions
+        function formatCurrency(amount) {
+            return 'GH₵' + parseFloat(amount).toFixed(2);
+        }
+        
+        // Show alert message
+        function showAlert(message, type = 'info') {
+            // Remove any existing alerts
+            const existingAlert = document.querySelector('.custom-alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+            
+            const alert = document.createElement('div');
+            alert.className = `custom-alert alert-${type}`;
+            alert.innerHTML = `
+                <div style="position: fixed; top: 20px; right: 20px; background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'}; 
+                            color: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+                            z-index: 9999; animation: slideIn 0.3s ease-out; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                    <div>
+                        <div style="font-weight: 500;">${message}</div>
+                        <div style="font-size: 12px; opacity: 0.9; margin-top: 5px;">
+                            ${type === 'success' ? 'Your changes have been saved successfully.' : ''}
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                </style>
+            `;
+            
+            document.body.appendChild(alert);
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                alert.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.parentNode.removeChild(alert);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Simplified printer detection
+        function detectPrinters() {
+            availablePrinters = [
+                { name: 'Default Printer', isDefault: true }
+            ];
+            updatePrinterDropdown();
+        }
+        
+        function updatePrinterDropdown() {
+            const dropdown = document.getElementById('printerSelect');
+            dropdown.innerHTML = '<option value="">Select printer...</option>';
+            
+            availablePrinters.forEach(printer => {
+                const option = document.createElement('option');
+                option.value = printer.name;
+                option.textContent = printer.name + (printer.isDefault ? ' (Default)' : '');
+                dropdown.appendChild(option);
+            });
+            
+            if (selectedPrinter) {
+                dropdown.value = selectedPrinter;
+            }
+        }
+        
+        function selectPrinter(printerName) {
+            selectedPrinter = printerName;
+            localStorage.setItem('printwell_selected_printer', printerName);
+        }
+
+        // Menu functions for opening new/existing invoice windows
+        function openNewInvoiceWindow() {
+            // Open a new window with the same application
+            const newWindow = window.open(window.location.href, '_blank', 'width=1400,height=900');
+            if (newWindow) {
+                newWindow.focus();
+            }
+        }
+
+        function openExistingInvoiceMenu() {
+            if (invoiceHistory.length === 0) {
+                showAlert('No saved invoices found', 'info');
+                return;
+            }
+
+            // Create a simple dialog to select from saved invoices
+            let options = '<div style="max-height: 400px; overflow-y: auto;">';
+            invoiceHistory.forEach((invoice, index) => {
+                const date = new Date(invoice.date).toLocaleDateString('en-GB');
+                options += `
+                    <div style="padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;" 
+                         onclick="loadInvoiceInNewWindow('${invoice.id}')">
+                        <div style="font-weight: bold;">${invoice.fileName || invoice.id}</div>
+                        <div style="font-size: 12px; color: #666;">${invoice.customerName} - ${date}</div>
+                    </div>
+                `;
+            });
+            options += '</div>';
+
+            // Show a modal with invoice list
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 11000;
+            `;
+            modal.innerHTML = `
+                <div style="background: white; padding: 20px; border-radius: 8px; min-width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+                    <h5 style="margin-bottom: 15px;">Select a Saved Invoice</h5>
+                    ${options}
+                    <button onclick="this.parentElement.parentElement.remove()" style="margin-top: 15px; padding: 8px 15px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        Close
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.onclick = function(e) {
+                if (e.target === modal) modal.remove();
+            };
+        }
+
+        function loadInvoiceInNewWindow(invoiceId) {
+            // Close the modal
+            const modal = document.querySelector('div[style*="position: fixed"]');
+            if (modal) modal.remove();
+
+            const invoice = invoiceHistory.find(inv => inv.id === invoiceId);
+            if (!invoice) {
+                showAlert('Invoice not found', 'error');
+                return;
+            }
+
+            // Store the invoice in sessionStorage to pass to new window
+            sessionStorage.setItem('printwell_invoice_to_load', JSON.stringify(invoice));
+
+            // Open new window
+            const newWindow = window.open(window.location.href, '_blank', 'width=1400,height=900');
+            if (newWindow) {
+                newWindow.focus();
+            }
+        }
+
+        // Load invoice from sessionStorage on page load
+        function loadInvoiceFromSession() {
+            const invoiceJson = sessionStorage.getItem('printwell_invoice_to_load');
+            if (invoiceJson) {
+                try {
+                    const invoice = JSON.parse(invoiceJson);
+                    // Load invoice data into form
+                    document.getElementById('customerName').value = invoice.customerName || '';
+                    document.getElementById('customerPhone').value = invoice.customerPhone || '';
+                    document.getElementById('invoiceNotes').value = invoice.notes || '';
+                    document.getElementById('taxRate').value = invoice.taxRate || '0';
+                    document.getElementById('invoiceStatus').value = invoice.status || 'pending';
+
+                    // Load items
+                    invoiceItems = (invoice.items || []).map((item, idx) => ({
+                        ...item,
+                        id: itemIdCounter + idx
+                    }));
+                    itemIdCounter += invoiceItems.length;
+
+                    if (invoiceItems.length > 0) {
+                        document.getElementById('emptyState').style.display = 'none';
+                        document.getElementById('itemsContainer').style.display = 'block';
+                        renderItems();
+                        calculateTotals();
+                    }
+
+                    // Clear sessionStorage after loading
+                    sessionStorage.removeItem('printwell_invoice_to_load');
+
+                    showAlert(`📄 Loaded invoice: ${invoice.fileName || invoice.id}`, 'info');
+                } catch (err) {
+                    console.error('Error loading invoice from session:', err);
+                }
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM loaded, initializing...");
+            loadAllData();
+            loadInvoiceFromSession(); // Load invoice if passed from another window
+            calculateTotals();
+            
+            // Event listeners
+            document.getElementById('productCalculationType').addEventListener('change', toggleCalculationTypeFields);
+            // Setup invoice history search
+            setupInvoiceHistorySearch();
+        });
+    </script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
