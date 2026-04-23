@@ -1,152 +1,168 @@
-# PRINTWELL Invoice — Professional Printing Invoice Software
+# ClearDesk - Compliance Agent MVP
 
-A desktop application for creating, managing, and printing professional invoices for printing services.
+Document Intelligence Platform for African Business - Module 1 (Compliance Agent)
 
-## Features
+## Overview
 
-- **Invoice Management**: Create, edit, view, and save invoices
-- **Product Catalog**: Manage custom printing products with flexible pricing (fixed or area-based)
-- **Invoice History**: Searchable history with customer names, products, dates, and keywords
-- **Company Settings**: Customize company info, logo, and footer
-- **Multi-Window**: Open multiple invoices concurrently
-- **Local Persistence**: All data saved locally; optional cloud sync ready
-- **Professional UI**: Clean, responsive interface with Bootstrap 5
+This is the first module of ClearDesk, a two-module SaaS platform. This MVP focuses solely on the **Compliance Agent** which:
+
+- Accepts business documents (PDF, DOCX, images)
+- Automatically classifies document types (GRA VAT Returns, SSNIT Forms, Invoices, etc.)
+- Extracts structured data using AI
+- Flags errors and validation issues
+- Provides an intelligent chat interface for querying documents
 
 ## Quick Start
 
-### For Users (Windows Installation)
+### Prerequisites
 
-1. Download the latest installer from [Releases](../../releases)
-2. Run `PrintWell_Setup.exe`
-3. Follow the on-screen installer instructions
-4. Launch PRINTWELL from Start Menu or Desktop shortcut
+- Python 3.13+
+- Node.js 18+
+- PostgreSQL
+- Redis (optional for caching)
 
-### For Developers
+### Backend Setup
 
-#### Prerequisites
-- Node.js 18+ and npm
-- Git
-
-#### Setup
-
+1. Navigate to backend directory:
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/PrintWell_Desktop.git
-cd PrintWell_Desktop
+cd backend
+```
 
-# Install dependencies
+2. Create virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your API keys
+```
+
+5. Run the server:
+```bash
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+API docs will be available at: http://localhost:8000/docs
+
+### Frontend Setup
+
+1. Navigate to frontend directory:
+```bash
+cd frontend
+```
+
+2. Install dependencies:
+```bash
 npm install
-
-# Start the app in development mode
-npm start
 ```
 
-#### Build (Windows Installer)
-
+3. Start development server:
 ```bash
-# Build for Windows (requires icon.png and icon.ico in project root)
-npm run build:win
+npm run dev
 ```
 
-Installer will be created in `dist/` directory.
+Frontend will be available at: http://localhost:3000
 
-#### Build via CI (GitHub Actions)
+## Features
 
-1. Push to main/master branch
-2. GitHub Actions automatically builds and uploads installer artifacts
-3. Download from [Actions](../../actions) tab → Latest workflow run → Artifacts
+### Document Processing
+- **Upload**: Drag & drop or click to upload documents
+- **OCR**: Automatic text extraction from images and scanned documents
+- **Classification**: AI-powered document type detection
+- **Data Extraction**: Structured data extraction based on document type
+- **Validation**: Automatic flagging of errors and missing information
+
+### Supported Document Types
+- GRA VAT Returns
+- SSNIT Forms
+- Invoices
+- Bank Statements
+- Payroll Sheets
+- Customs Declarations
+- Purchase Orders
+- Employment Contracts
+- Receipts
+
+### Chat Interface
+- Real-time conversation with AI agent
+- Context-aware responses based on uploaded documents
+- Proactive issue identification
+- Natural language queries about document data
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login user
+- `GET /api/auth/me` - Get current user
+
+### Documents
+- `POST /api/documents/upload` - Upload document
+- `POST /api/documents/scan` - Upload mobile scan
+- `GET /api/documents/` - List documents
+- `GET /api/documents/{id}` - Get document details
+- `DELETE /api/documents/{id}` - Delete document
+
+### Agent/Chat
+- `GET /api/agent/session` - Get/create chat session
+- `POST /api/agent/message` - Send message to agent
+- `GET /api/agent/history` - Get chat history
+- `WS /ws/chat/{session_id}` - WebSocket for real-time chat
+
+### Compliance
+- `POST /api/compliance/classify` - Re-classify document
+- `GET /api/compliance/summary` - Get compliance summary
+
+## Technology Stack
+
+### Backend
+- FastAPI (Python 3.13)
+- SQLAlchemy + PostgreSQL
+- Grok API for AI processing
+- Tesseract OCR
+- JWT Authentication
+
+### Frontend
+- React 18 + Vite
+- TailwindCSS
+- Framer Motion
+- React Router
+- Axios
 
 ## Project Structure
 
 ```
-PrintWell_Desktop/
-├── index.html          # Main UI
-├── main.js             # Electron main process
-├── preload.js          # IPC bridge (context isolation)
-├── style.css           # Styling
-├── package.json        # Dependencies and build config
-├── icon.ico            # Windows icon (for installer)
-├── icon.png            # App icon (512x512)
-├── tools/              # Build utilities
-│   └── generate-icons-jimp.js  # Icon generator (if needed)
-└── .github/workflows/
-    └── build-windows.yml       # CI/CD configuration
+cleardesk/
+├── backend/
+│   ├── api/routes/       # API route handlers
+│   ├── services/         # Business logic
+│   ├── models/           # Database models
+│   ├── config.py         # Configuration
+│   └── main.py           # App entry point
+├── frontend/
+│   ├── src/
+│   │   ├── components/   # React components
+│   │   ├── pages/        # Page components
+│   │   ├── hooks/        # Custom hooks
+│   │   └── services/     # API client
+│   └── package.json
+└── README.md
 ```
 
-## Configuration
+## Next Steps
 
-### Company Settings
-
-Edit settings in the app's Settings tab:
-- Company name, address, phone, email
-- Custom footer text
-- Logo upload
-
-Settings are saved locally in:
-- Windows: `%APPDATA%\PrintWell Invoice\`
-
-### Products
-
-Create and customize printing products:
-- **Fixed pricing**: per-size prices (e.g., posters, stickers)
-- **Area-based pricing**: price per square foot/meter
-
-Products saved locally; can be exported/imported.
-
-## IPC Handlers (Electron)
-
-The app exposes these IPC methods via `window.electronAPI`:
-
-- `saveSettings(settings)` — Save company info
-- `loadSettings()` — Load company settings
-- `saveProducts(products)` — Save product catalog
-- `loadProducts()` — Load products
-- `saveInvoiceFile(html, filename)` — Save invoice as HTML file
-
-## Invoice History Search
-
-Use the **Search** field in the Invoice History tab to filter by:
-- Customer name
-- Invoice number/ID
-- Product names
-- Notes and keywords
-
-Search is case-insensitive and matches any part of indexed fields.
-
-## Troubleshooting
-
-### npm install fails with ECONNRESET
-
-Network issue. Try:
-```bash
-npm cache clean --force
-npm install --fetch-retries=5 --fetch-retry-factor=2
-```
-
-Or use GitHub Actions to build (no local npm needed).
-
-### Missing icon files
-
-If `icon.ico` or `icon.png` are missing:
-1. Use an online converter (e.g., icoconvert.com, convertico.com)
-2. Upload a PNG image, download ICO and PNG files
-3. Place `icon.ico` and `icon.png` in project root
-4. Rebuild: `npm run build:win`
-
-### Installer not found after build
-
-Check `dist/` folder for `.exe` file. If missing:
-- Ensure `package.json` `build.win.target` is set to `"nsis"`
-- Verify `icon.ico` exists in project root
+After validating this Compliance Agent MVP, we will build:
+1. **Module 2 - Real Estate Agent**: Property listing generation and management
+2. **Unified Dashboard**: Single dashboard housing both modules
 
 ## License
 
-MIT
-
-## Support
-
-For issues or questions, open a GitHub Issue.
-
----
-
-**Built with Electron, Node.js, and Bootstrap 5**
+Built for Ghana 🇬🇭 • Made for Africa
